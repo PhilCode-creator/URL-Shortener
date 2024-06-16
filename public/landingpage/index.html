@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mein Formular</title>
+    <style>
+        /* Stil für das Eingabefeld */
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Stil für das Response-Feld */
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <form id="urlForm">
+        <label for="eingabe">Eingabe:</label>
+        <input type="text" id="eingabe" name="eingabe" placeholder="Gib hier etwas ein...">
+        <button type="submit">Submit</button>
+    </form>
+    <div id="response">
+        <!-- Hier wird die Antwort angezeigt -->
+    </div>
+
+    <script>
+        document.getElementById('urlForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const input = document.getElementById('eingabe').value;
+            
+            const responseDiv = document.getElementById('response');
+            responseDiv.innerHTML = 'Processing...';
+            
+            try {
+                const response = await fetch('http://localhost:8080/api/create/addURL', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url: input })
+                });
+                
+                const data = await response.json();
+                console.log(data)
+                if (data.success) {
+                    responseDiv.innerHTML = `Shortened URL: ${data.shortCode}`;
+                } else {
+                    responseDiv.innerHTML = `Error: ${data.error}`;
+                }
+            } catch (error) {
+                responseDiv.innerHTML = 'Error: Unable to create shortened URL.';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+CREATE TABLE  `urls` (`origin` TEXT NOT NULL , `shortened` VARCHAR(8) NOT NULL , UNIQUE (`shortened`)) ENGINE = InnoDB; 
