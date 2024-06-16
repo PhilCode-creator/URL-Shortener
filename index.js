@@ -1,20 +1,21 @@
-// index.js (or app.js)
 const {getFullURL} = require('./modules/database')
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+
 // Specify the path to the .env file
 dotenv.config({ path: './config/.env' });
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
-app.use(cors());
-app.use(express.static('public/landingpage')); // Serve static files from the 'public' directory
-app.use(express.static('public/404')); // Serve static files from the 'public' directory
 
-// Import routers
+app.use(cors());
+app.use(express.static('public/landingpage')); // Serve static files from the 'public/landingpage' directory
+app.use(express.static('public/404')); // Serve static files from the 'public/404' directory
+
+// Import router
 const createRouter = require('./routes/createRoute');
 
 // Routes
@@ -36,6 +37,7 @@ app.get('*', async (req, res) => {
         res.redirect(result.fullURL);
     }
 });
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
